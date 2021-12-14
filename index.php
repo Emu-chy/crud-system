@@ -8,7 +8,7 @@
      $stuReg = ($_POST['stdreg']);
      $stuRoll = ($_POST['stdroll']);
      
-     if(!empty($stuName) && !empty($stuReg)){
+     if(!empty($stuName) && !empty($stuReg)&&!empty($stdroll)){
        $query = " INSERT INTO student(stdname,stdreg,stdroll) VALUE('$stuName', $stuReg, $stuRoll)";
        $createQuery = mysqli_query($conn, $query);
 
@@ -46,6 +46,26 @@
       }
        }
   ?>
+  <?php
+  
+  if(isset($_POST["edit_btn"])){
+   $stdname = $_POST["stdname"];
+   $stdreg = $_POST["stdreg"];
+   $stdroll = $_POST["stdroll"];
+
+
+
+   $query = "UPDATE student SET stdname='$stdname', stdreg = $stdreg, stdroll = $stdroll WHERE 
+   id=$stdid";
+   $updateQuery = mysqli_query($conn, $query);
+   if($updateQuery){
+     echo "updated done";
+   }
+   
+   
+  }
+  
+  ?>
 
 
 <!doctype html>
@@ -62,6 +82,7 @@
 
        <div class="container shadow m-5 p-3 ">
         <form action=" " method="post" class="d-flex justify-content-center">
+
         <input   class="form contorl m-2" type="text" name="stdname" placeholder="enter your name">
 
         <input class="form control m-2" type="number" name="stdreg" placeholder="enter your reg number">
@@ -78,14 +99,16 @@
       
         
 
-          <input class="form control m-2" type="text" name="stdname" value="<?php 
-          echo $studentName;?>">
+      <input class="form control m-2" type="text" name="stdname" value="<?php 
+       if(isset($studentName)){
+        echo $studentName;
+        }?>">
 
           <input class="form control m-2" type="number" name="stdreg" value="<?php echo $stdreg;?>">
 
           <input class="form control m-2" type="number" name="stdroll" value="<?php echo $stdroll;?>">
           
-          <input class="btn btn-primary m-2" type="submit" value="edit" name="edit_btn" >
+          <input class="btn btn-primary m-2" type="submit" value="Update" name="edit_btn" >
 
       </form> 
     </div>
@@ -102,6 +125,7 @@
 
         <!-- select all data from database and show in table  -->
         <?php
+        $i = 1;
          $query = "SELECT * FROM student";
          $readQuery = mysqli_query($conn, $query);
          if($readQuery->num_rows>0){
@@ -113,7 +137,7 @@
              $stdroll = $read['stdroll'];
          ?>
         <tr>
-          <th><?php echo $stdid;?></th>
+          <th><?php echo $i++;?></th>
           <th><?php echo $stdname;?></th>
           <th><?php echo $stdreg;?></th>
           <th><?php echo $stdroll;?></th>
